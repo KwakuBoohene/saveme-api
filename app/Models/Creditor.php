@@ -14,7 +14,8 @@ class Creditor extends Model
         'amount',
         'date',
         'payment_deadline',
-        'paid'
+        'paid',
+        'user_id'
     ];
 
     public function user(){

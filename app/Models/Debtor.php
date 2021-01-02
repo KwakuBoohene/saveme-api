@@ -14,7 +14,8 @@ class Debtor extends Model
         'amount',
         'date',
         'payment_date',
-        'paid'
+        'paid',
+        'user_id'
     ];
 
     public function user(){

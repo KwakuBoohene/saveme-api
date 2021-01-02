@@ -14,6 +14,7 @@ class CreateSummariesTable extends Migration
     public function up()
     {
         Schema::create('summaries', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->double('net_income',$scale=2);
             $table->double('net_debt',$scale=2);

@@ -12,9 +12,11 @@ class IncomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        //Shows all instances a user gained income
+        $income = Income::where('user_id',$id)->get();
+        return response()->json($income);
     }
 
     /**
@@ -36,6 +38,16 @@ class IncomeController extends Controller
     public function store(Request $request)
     {
         //
+
+        $request->validate([
+            'source' => 'required',
+            'amount' => 'required',
+            'date' => 'required',
+            'user_id' => 'required',
+        ]);
+        $income = Income::create($request->all());
+        return response()->json(['message'=> 'income instance created',
+        'income' => $income]);
     }
 
     /**
@@ -47,6 +59,7 @@ class IncomeController extends Controller
     public function show(Income $income)
     {
         //
+        return $income;
     }
 
     /**
@@ -67,9 +80,19 @@ class IncomeController extends Controller
      * @param  \App\Models\Income  $income
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Income $income)
+    public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'source' => 'required',
+            'amount' => 'required',
+            'date' => 'required',
+            'user_id' => 'required',
+        ]);
+        $income = Income::find($id);
+        $income->update($request->all());
+        return response()->json(['message'=> 'income instance updated',
+        'income' => $income]);
     }
 
     /**
@@ -81,5 +104,9 @@ class IncomeController extends Controller
     public function destroy(Income $income)
     {
         //
+        $income->delete();
+        return response()->json([
+            'message'=>'income instance deleted'
+        ]);
     }
 }

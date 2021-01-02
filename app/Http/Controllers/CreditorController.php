@@ -12,9 +12,12 @@ class CreditorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
         //
+
+        $creditor = Creditor::where('user_id',$id)->get();
+        return response()->json($creditor);
     }
 
     /**
@@ -36,6 +39,17 @@ class CreditorController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' => 'required',
+        'amount' => 'required',
+        'date' => 'required',
+        'payment_deadline' => 'required',
+        'paid' => 'required',
+        'user_id' => 'required',
+        ]);
+        $creditor = Creditor::create($request->all());
+        return response()->json(['message'=> 'creditor instance created',
+        'creditor' => $creditor]);
     }
 
     /**
@@ -47,6 +61,7 @@ class CreditorController extends Controller
     public function show(Creditor $creditor)
     {
         //
+        return $creditor;
     }
 
     /**
@@ -67,9 +82,21 @@ class CreditorController extends Controller
      * @param  \App\Models\Creditor  $creditor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Creditor $creditor)
+    public function update(Request $request, $id)
     {
         //
+        $request->validate([
+        'name' => 'required',
+        'amount' => 'required',
+        'date' => 'required',
+        'payment_deadline' => 'required',
+        'paid' => 'required',
+        'user_id' => 'required',
+        ]);
+        $creditor = Creditor::find($id);
+        $creditor->update($request->all());
+        return response()->json(['message'=> 'creditor instance updated',
+        'creditor' => $creditor]);
     }
 
     /**
@@ -81,5 +108,9 @@ class CreditorController extends Controller
     public function destroy(Creditor $creditor)
     {
         //
+        $creditor->delete();
+        return response()->json([
+            'message'=>'creditor  deleted'
+        ]);
     }
 }

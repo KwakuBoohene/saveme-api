@@ -12,6 +12,7 @@ class Summary extends Model
     protected $fillable = [
         'net_income',
         'net_debt',
+        'user_id'
     ];
 
     public function user(){

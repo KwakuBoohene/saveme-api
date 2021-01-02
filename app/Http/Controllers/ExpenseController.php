@@ -12,10 +12,16 @@ class ExpenseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+
+    public function index($id)
     {
-        //
+        //Shows user expenses by user
+
+        $expenses = Expense::where('user_id',$id)->get();
+        return response()->json($expenses);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,7 +41,17 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //stores a user expense
+        $request->validate([
+            'description' => 'required',
+            'amount' => 'required',
+            'date' => 'required',
+            'user_id' => 'required',
+        ]);
+        $expense = Expense::create($request->all());
+        return response()->json(['message'=> 'expense created',
+        'expense' => $expense]);
+        // return Expense::create($request->all());
     }
 
     /**
@@ -47,6 +63,7 @@ class ExpenseController extends Controller
     public function show(Expense $expense)
     {
         //
+        return $expense;
     }
 
     /**
@@ -67,9 +84,22 @@ class ExpenseController extends Controller
      * @param  \App\Models\Expense  $expense
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Expense $expense)
+    public function update(Request $request, $id)
     {
-        //
+        //updates a user expense
+        $request->validate([
+            'description' => 'required',
+            'amount' => 'required',
+            'date' => 'required',
+            'user_id' => 'required',
+        ]);
+        $expense = Expense::find($id);
+        $expense->update($request->all());
+
+        return response()->json([
+            'message' => 'expense updated!',
+            'expense' => $expense
+        ]);
     }
 
     /**
@@ -80,6 +110,11 @@ class ExpenseController extends Controller
      */
     public function destroy(Expense $expense)
     {
-        //
+        //deletes a user expense
+
+        $expense->delete();
+        return response()->json([
+            'message' => 'expense deleted'
+        ]);
     }
 }

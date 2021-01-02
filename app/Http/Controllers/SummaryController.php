@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Summary;
+use App\Models\Income;
+use App\Models\Expense;
+use App\Models\Debtor;
+use App\Models\Creditor;
 use Illuminate\Http\Request;
 
 class SummaryController extends Controller
@@ -12,9 +16,11 @@ class SummaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
         //
+        $summary = Summary::where('user_id',$id)->get();
+        return response()->json($summary);
     }
 
     /**
@@ -33,9 +39,23 @@ class SummaryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($id)
     {
         //
+        $income = Income::where('user_id',$id)->sum('amount');
+        $expense = Expense::where('user_id',$id)->sum('amount');
+        $net_income = $income - $expense;
+        $debtors = Debtor::where('user_id',$id)->sum('amount');
+        $creditors = Creditor::where('user_id',$id)->sum('amount');
+        $net_debt  = $creditors - $debtors;
+        $summary = Summary::create([
+            'user_id' => $id,
+            'net_income' => $net_income,
+            'net_debt' => $net_debt
+        ]);
+
+        return response()->json(['message'=> 'summary instance created',
+        'summary' => $summary]);
     }
 
     /**
@@ -67,9 +87,24 @@ class SummaryController extends Controller
      * @param  \App\Models\Summary  $summary
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Summary $summary)
+    public function update(Request $request, $id)
     {
         //
+        $income = Income::where('user_id',$id)->sum('amount');
+        $expense = Expense::where('user_id',$id)->sum('amount');
+        $net_income = $income - $expense;
+        $debtors = Debtor::where('user_id',$id)->sum('amount');
+        $creditors = Creditor::where('user_id',$id)->sum('amount');
+        $net_debt  = $debtors - $creditors;
+        $summary = Summary::where('user_id',$id)->first();
+        $summary->update([
+            'user_id' => $id,
+            'net_income' => $net_income,
+            'net_debt' => $net_debt
+            ]);
+
+        return response()->json(['message'=> 'summary instance updated',
+        'summary' => $summary]);
     }
 
     /**
@@ -81,5 +116,9 @@ class SummaryController extends Controller
     public function destroy(Summary $summary)
     {
         //
+        $creditor->delete();
+        return response()->json([
+            'message'=>'creditor  deleted'
+        ]);
     }
 }

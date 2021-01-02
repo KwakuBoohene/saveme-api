@@ -12,9 +12,11 @@ class DebtorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
         //
+        $debtor = Debtor::where('user_id',$id)->get();
+        return response()->json($debtor);
     }
 
     /**
@@ -36,6 +38,17 @@ class DebtorController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' => 'required',
+        'amount' => 'required',
+        'date' => 'required',
+        'payment_date' => 'required',
+        'paid' => 'required',
+        'user_id' => 'required',
+        ]);
+        $debtor = Debtor::create($request->all());
+        return response()->json(['message'=> 'debtor instance created',
+        'debtor' => $debtor]);
     }
 
     /**
@@ -47,6 +60,7 @@ class DebtorController extends Controller
     public function show(Debtor $debtor)
     {
         //
+        return $debtor;
     }
 
     /**
@@ -67,9 +81,21 @@ class DebtorController extends Controller
      * @param  \App\Models\Debtor  $debtor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Debtor $debtor)
+    public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'name' => 'required',
+            'amount' => 'required',
+            'date' => 'required',
+            'payment_date' => 'required',
+            'paid' => 'required',
+            'user_id' => 'required',
+            ]);
+            $debtor = Debtor::find($id);
+            $debtor->update($request->all());
+            return response()->json(['message'=> 'debtor instance updated',
+            'debtor' => $debtor]);
     }
 
     /**
@@ -81,5 +107,9 @@ class DebtorController extends Controller
     public function destroy(Debtor $debtor)
     {
         //
+        $debtor->delete();
+        return response()->json([
+            'message'=>'debtor  deleted'
+        ]);
     }
 }
