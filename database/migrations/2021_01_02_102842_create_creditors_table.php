@@ -15,6 +15,12 @@ class CreateCreditorsTable extends Migration
     {
         Schema::create('creditors', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->double('amount',$scale=2);
+            $table->date('date');
+            $table->date('payment_deadline')->nullable();
+            $table->boolean('paid');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

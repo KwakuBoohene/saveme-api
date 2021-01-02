@@ -15,7 +15,11 @@ class CreateIncomesTable extends Migration
     {
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
+            $table->mediumText('source');
+            $table->date('date');
+            $table->double('amount',$scale=2);
             $table->timestamps();
+            $table->foreignId('user_id')->constrained('users');
         });
     }
 

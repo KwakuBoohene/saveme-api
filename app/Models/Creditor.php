@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Creditor extends Model
 {
     use HasFactory;
+    protected $table = "creditors";
+    protected $fillable = [
+        'name',
+        'amount',
+        'date',
+        'payment_deadline',
+        'paid'
+    ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

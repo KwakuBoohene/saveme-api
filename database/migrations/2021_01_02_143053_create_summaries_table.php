@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDebtorsTable extends Migration
+class CreateSummariesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateDebtorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('debtors', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->double('amount',$scale=2);
-            $table->date('date');
-            $table->date('payment_date')->nullable();
-            $table->boolean('paid');
+        Schema::create('summaries', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained('users');
+            $table->double('net_income',$scale=2);
+            $table->double('net_debt',$scale=2);
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ class CreateDebtorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('debtors');
+        Schema::dropIfExists('summaries');
     }
 }
