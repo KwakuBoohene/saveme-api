@@ -15,7 +15,7 @@ class IncomeController extends Controller
     public function index($id)
     {
         //Shows all instances a user gained income
-        $income = Income::where('user_id',$id)->get();
+        $income = auth()->user()->income();
         return response()->json($income);
     }
 

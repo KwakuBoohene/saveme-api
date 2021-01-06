@@ -7,7 +7,7 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\CreditorController;
 use App\Http\Controllers\DebtorController;
 use App\Http\Controllers\SummaryController;
-
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,9 +19,7 @@ use App\Http\Controllers\SummaryController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
 
 Route::resource('expense', ExpenseController::class);
 Route::get('expense-user/{id}',[ExpenseController::class,'index']);
@@ -41,3 +39,10 @@ Route::post('summary/{id}' , [SummaryController::class,'store'])->name('summary.
 Route::put('summary/{id}' , [SummaryController::class,'update'])->name('summary.update');
 Route::delete('summary/{id}', [SummaryController::class,'destroy'])->name('summary.destroy');
 
+// User routes
+
+Route::resource('user',UserController::class);
+
+Route::middleware('auth')->get('user',[UserController::class, 'index']);
+
+Route::post('login',[UserController::class,'login']);

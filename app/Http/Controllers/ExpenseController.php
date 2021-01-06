@@ -14,11 +14,12 @@ class ExpenseController extends Controller
      */
 
 
-    public function index($id)
+    public function index()
     {
         //Shows user expenses by user
 
-        $expenses = Expense::where('user_id',$id)->get();
+        $expenses = auth()->user()->expenses();
+        api_error();
         return response()->json($expenses);
     }
 

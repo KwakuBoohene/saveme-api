@@ -16,7 +16,7 @@ class CreditorController extends Controller
     {
         //
 
-        $creditor = Creditor::where('user_id',$id)->get();
+        $creditor = auth()->user()->creditor();
         return response()->json($creditor);
     }
 

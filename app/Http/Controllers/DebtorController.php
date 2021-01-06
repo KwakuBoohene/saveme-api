@@ -15,7 +15,7 @@ class DebtorController extends Controller
     public function index($id)
     {
         //
-        $debtor = Debtor::where('user_id',$id)->get();
+        $debtor = auth()->user()->debtor();
         return response()->json($debtor);
     }
 
