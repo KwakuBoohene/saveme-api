@@ -19,7 +19,7 @@ class SummaryController extends Controller
     public function index($id)
     {
         //
-        $summary = Summary::where('user_id',$id)->get();
+        $summary = auth()->user()->summary;
         return response()->json($summary);
     }
 
@@ -39,9 +39,10 @@ class SummaryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($id)
+    public function store()
     {
         //
+        $id = auth()->user()->id;
         $income = Income::where('user_id',$id)->sum('amount');
         $expense = Expense::where('user_id',$id)->sum('amount');
         $net_income = $income - $expense;
@@ -87,9 +88,10 @@ class SummaryController extends Controller
      * @param  \App\Models\Summary  $summary
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        $id = auth()->user()->id;
         $income = Income::where('user_id',$id)->sum('amount');
         $expense = Expense::where('user_id',$id)->sum('amount');
         $net_income = $income - $expense;
@@ -116,9 +118,9 @@ class SummaryController extends Controller
     public function destroy(Summary $summary)
     {
         //
-        $creditor->delete();
+        $summary->delete();
         return response()->json([
-            'message'=>'creditor  deleted'
+            'message'=>'summary  deleted'
         ]);
     }
 }

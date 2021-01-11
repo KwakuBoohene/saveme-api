@@ -21,28 +21,31 @@ use App\Http\Controllers\UserController;
 
 
 
-Route::resource('expense', ExpenseController::class);
-Route::get('expense-user/{id}',[ExpenseController::class,'index']);
 
-Route::resource('income' , IncomeController::class);
-Route::get('income-user/{id}',[IncomeController::class,'index']);
-
-Route::resource('creditor' , CreditorController::class);
-Route::get('creditor-user/{id}',[CreditorController::class,'index']);
-
-Route::resource('debtor' , DebtorController::class);
-Route::get('debtor-user/{id}',[DebtorController::class,'index']);
-
-
-Route::get('summary/{id}' , [SummaryController::class,'index'])->name('summary.index');
-Route::post('summary/{id}' , [SummaryController::class,'store'])->name('summary.store');
-Route::put('summary/{id}' , [SummaryController::class,'update'])->name('summary.update');
-Route::delete('summary/{id}', [SummaryController::class,'destroy'])->name('summary.destroy');
 
 // User routes
 
 Route::resource('user',UserController::class);
-
-Route::middleware('auth')->get('user',[UserController::class, 'index']);
-
 Route::post('login',[UserController::class,'login']);
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('user',[UserController::class, 'index']);
+    Route::resource('expense', ExpenseController::class);
+
+    Route::resource('income' , IncomeController::class);
+
+    Route::resource('creditor' , CreditorController::class);
+
+    Route::resource('debtor' , DebtorController::class);
+    
+
+
+    Route::get('summary/{id}' , [SummaryController::class,'index'])->name('summary.index');
+    Route::post('summary/{id}' , [SummaryController::class,'store'])->name('summary.store');
+    Route::put('summary/{id}' , [SummaryController::class,'update'])->name('summary.update');
+    Route::delete('summary/{id}', [SummaryController::class,'destroy'])->name('summary.destroy');
+
+});
+
+

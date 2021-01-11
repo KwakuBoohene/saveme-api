@@ -17,7 +17,19 @@ class UserController extends Controller
     {
 
         //Route to get authenticated user
-        return auth()->user();
+
+        if(auth()->user()){
+            return response()->json([
+                'username' => auth()->user()->username
+            ]);
+        }
+        else{
+            return response()->json([
+                'error' => "No user has been logged in"
+            ]);
+
+        }
+
     }
 
     /**
@@ -93,17 +105,33 @@ class UserController extends Controller
         //
     }
 
-    public function login(Request $request){
-
-        $credentials = $request->only(['username','password']);
-        $token = auth()->attempt($credentials);
-
-        if(!$token){
-            return response()->json(['error' =>'invalid credentials']);
+    public function authenticate(Request $request){
+        if($request['email'] && $request['password']){
+            $credentials = $request->only(['email','password']);
+            $token = auth()->attempt($credentials);
+            if(!$token){
+                return response()->json(['error' =>'invalid credentials']);
+            }
+            return true;
         }
+        return response()->json(['error' =>'invalid credentials']);
 
-        return response()->json([
-            "token" => $token
-            ]);
+    }
+
+    public function login(Request $request){
+        $authenticate = $this->authenticate($request);
+        if($authenticate){
+            $credentials = $request->only(['email','password']);
+            $user = User::where('email',$credentials['email'])->first();
+            $token = auth()->login($user);
+            return response()->json([
+                "token" => $token,
+                "message" => $user->username.' logged in successfully'
+                ]);
+        }
+    }
+
+    public function logout(){
+        auth()->logout();
     }
 }

@@ -12,11 +12,11 @@ class CreditorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
         //
 
-        $creditor = auth()->user()->creditor();
+        $creditor = auth()->user()->creditor;
         return response()->json($creditor);
     }
 

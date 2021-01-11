@@ -12,10 +12,12 @@ class DebtorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+
+
+    public function index()
     {
         //
-        $debtor = auth()->user()->debtor();
+        $debtor = auth()->user()->debtor;
         return response()->json($debtor);
     }
 
@@ -46,7 +48,7 @@ class DebtorController extends Controller
         'paid' => 'required',
         'user_id' => 'required',
         ]);
-        $debtor = Debtor::create($request->all());
+        $debtor = Debtor::create($request->all()+['user_id']);
         return response()->json(['message'=> 'debtor instance created',
         'debtor' => $debtor]);
     }

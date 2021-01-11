@@ -12,10 +12,10 @@ class IncomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
         //Shows all instances a user gained income
-        $income = auth()->user()->income();
+        $income = auth()->user()->income;
         return response()->json($income);
     }
 

@@ -18,8 +18,7 @@ class ExpenseController extends Controller
     {
         //Shows user expenses by user
 
-        $expenses = auth()->user()->expenses();
-        api_error();
+        $expenses = auth()->user()->expenses;
         return response()->json($expenses);
     }
 
@@ -47,9 +46,11 @@ class ExpenseController extends Controller
             'description' => 'required',
             'amount' => 'required',
             'date' => 'required',
-            'user_id' => 'required',
+
         ]);
-        $expense = Expense::create($request->all());
+        $expense = Expense::create($request->all()+[
+            'user_id' => auth()->user()->id
+        ]);
         return response()->json(['message'=> 'expense created',
         'expense' => $expense]);
         // return Expense::create($request->all());
@@ -92,7 +93,6 @@ class ExpenseController extends Controller
             'description' => 'required',
             'amount' => 'required',
             'date' => 'required',
-            'user_id' => 'required',
         ]);
         $expense = Expense::find($id);
         $expense->update($request->all());
