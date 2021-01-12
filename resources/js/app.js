@@ -17,7 +17,8 @@ require('./bootstrap');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './routes.js';
-import Example from './components/Example';
+import 'semantic-ui-css/semantic.min.css';
+import '../css/app.css';
 import Routes from './routes';
 
 class App extends React.Component {

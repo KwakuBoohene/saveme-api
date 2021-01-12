@@ -1,0 +1,29 @@
+header{
+    display:grid;
+    grid-template-columns: 6fr 1fr;
+    padding:16px;
+    background: white;
+}
+
+.head{
+    min-height: 100vh;
+    background: url("../../public/images/background-copy.jpg") no-repeat fixed ;
+}
+
+.header-icon{
+    color:rgb(59, 57, 57);
+}
+
+body{
+    font-size: 13px;
+}
+
+
+.bc{
+    border: 1px solid red;
+}
+
+.login{
+    margin-top: 16px;
+}
+
