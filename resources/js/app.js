@@ -16,15 +16,15 @@ require('./bootstrap');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Link } from 'react-router-dom'
+import './routes.js';
 import Example from './components/Example';
-// import Routes from './routes';
+import Routes from './routes';
 
 class App extends React.Component {
     render() {
         return (
             <div className="">
-                <Example/>
+                <Routes/>
             </div>
         )
     }
