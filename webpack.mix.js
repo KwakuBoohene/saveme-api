@@ -16,3 +16,11 @@ mix.react('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
 
     ;
+
+    mix.webpackConfig({
+        devServer: {
+            proxy: {
+                '*': 'http://localhost:8000'
+            }
+        }
+    });

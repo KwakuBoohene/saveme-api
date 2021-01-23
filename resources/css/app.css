@@ -14,8 +14,10 @@ header{
     color:rgb(59, 57, 57);
 }
 
-body{
+body,#root,.body{
     font-size: 13px;
+    margin:0;
+    padding:0;
 }
 
 
@@ -27,3 +29,6 @@ body{
     margin-top: 16px;
 }
 
+.main{
+    min-height: 99vh;
+}

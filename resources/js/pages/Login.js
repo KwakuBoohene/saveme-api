@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react';
-import {Link} from 'react-router-dom';
+import {Link,Redirect} from 'react-router-dom';
 import {Change,Submit} from '../components/Helpers';
+import auth from '../auth/auth';
 
 export default class Login extends React.Component{
     constructor(props) {
@@ -10,6 +11,7 @@ export default class Login extends React.Component{
             email: '',
             password: '',
             valued:'',
+            logged: false,
         };
         this.Change = Change.bind(this)
         this.Submit = Submit.bind(this)
@@ -20,8 +22,17 @@ export default class Login extends React.Component{
             valued: value
         })
     }
-    render(){
+
+    login(){
         let {email,password} = this.state;
+        auth.login(()=>{
+            this.setState({
+                logged: true
+            })
+        })
+    }
+    render(){
+        let {email,password,logged} = this.state;
         return(
         <div className="login">
         <Grid className='' textAlign='center' style={{ height: '100vh' }} verticalAlign='top'>
@@ -32,20 +43,15 @@ export default class Login extends React.Component{
             <Form size='large'   >
               <Segment stacked>
                 <Form.Input fluid icon='user' iconPosition='left'
-                placeholder='E-mail address' name='email' type='email' value={email} onChange = {this.Change}  />
+                placeholder='E-mail address' name='email' type='email'
+                 value={email} onChange = {this.Change}  />
                 <Form.Input
-                  fluid
-                  icon='lock'
-                  iconPosition='left'
-                  placeholder='Password'
-                  name='password'
-                  type='password'
-                  value = {password}
-                  onChange= {this.Change}
+                  fluid icon='lock' iconPosition='left' placeholder='Password'
+                  name='password'  type='password' value = {password} onChange= {this.Change}
 
                 />
 
-                <Button type='button' color='teal' fluid size='large' onClick = {()=> this.Submit([email,password])}   >
+                <Button type='button' color='teal' fluid size='large' onClick = {()=> this.login()}   >
                   Login
                 </Button>
               </Segment>
@@ -56,7 +62,9 @@ export default class Login extends React.Component{
           </Grid.Column>
         </Grid>
 
-
+            {
+                logged ? <Redirect to='/home'/> : null
+            }
     </div>
      )
     }
