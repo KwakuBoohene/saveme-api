@@ -9,18 +9,13 @@ import {ProtectedRoute} from './components/ProtectedRoute';
 export default function Routes(){
     return (
         <Router>
-                <Route path='/login'>
-                    <Login/>
-                </Route>
-
-                <Route path="/signup">
-                    <Signup/>
-                </Route>
-                <Route exact path='/'>
-                    <Landing/>
-                </Route>
+            <Switch>
+                <Route path='/login' component={Login}/>
+                <Route path="/signup" compnent={Signup}/>
+                <Route exact path='/' component = {Landing}/>
                 <ProtectedRoute path='/home' component={Home} />
-
+                <Route path="*" component={()=>" 404 PAGE NOT FOUND"} />
+            </Switch>
         </Router>
     )
 

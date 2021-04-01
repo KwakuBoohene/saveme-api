@@ -1,12 +1,28 @@
 import React from 'react';
-import { Button, Form, Grid, Header,
-    Icon, Image, Menu, Message,  Segment, Sidebar } from 'semantic-ui-react';
-import {Link} from 'react-router-dom';
+import { Sidebar, Menu, Icon,  Segment } from 'semantic-ui-react';
+import {Link,Redirect} from 'react-router-dom';
 import {Change,Submit} from '../components/Helpers';
+import auth from '../auth/auth';
 
 
 export default class Body extends React.Component{
+    constructor(props) {
+    super(props);
+     this.state = {
+         redirect: false
+     }
+    }
+
+    logout(){
+        auth.logout(()=>{
+            this.setState(
+                {redirect: true}
+            )
+        })
+
+    }
     render(){
+        let redirect = this.state.redirect;
         return(
             <div className="body">
                   <Sidebar.Pushable as={Segment}>
@@ -30,8 +46,8 @@ export default class Body extends React.Component{
                         <Icon name='camera' />
                         Channels
                     </Menu.Item>
-                    <Menu.Item as='a'>
-                        <Icon name='x' />
+                    <Menu.Item as='a' onClick={()=>this.logout()}>
+                        <Icon name='x' color='red' />
                         Logout
                     </Menu.Item>
                     </Sidebar>
@@ -45,7 +61,10 @@ export default class Body extends React.Component{
                     </Sidebar.Pusher>
 
                 </Sidebar.Pushable>
+                {redirect ? <Redirect to='/'/> : null}
             </div>
+
+
         )
     }
 }

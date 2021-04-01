@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 
@@ -15,13 +14,6 @@ export default function Landing() {
                     </div>
 
                     <div className="nav">
-                        <Button as={Link} to='/login' color="green">
-                            Login
-                        </Button>
-
-                        <Button as={Link} to='/signup'  color="olive">
-                            Sign Up
-                        </Button>
                     </div>
                 </header>
             </div>

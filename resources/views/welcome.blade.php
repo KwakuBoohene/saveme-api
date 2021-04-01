@@ -22,8 +22,8 @@
     </head>
     <body>
         <div id="app">
-
+            This is the home Page
         </div>
     </body>
-    <script src="{{ asset('js/react/app.js') }}"></script>
+    {{-- <script src="{{ asset('js/react/app.js') }}"></script> --}}
 </html>

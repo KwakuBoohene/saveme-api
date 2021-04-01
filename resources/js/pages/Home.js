@@ -3,6 +3,14 @@ import Body from '../components/Body';
 
 
 export default class Home extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            redirect: false
+        }
+    }
+
+
     render(){
         const content =
             <div className="content">
