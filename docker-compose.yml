@@ -17,6 +17,7 @@ services:
             - '.:/var/www/html'
         networks:
             - sail
+            - takeout
         depends_on:
             - mysql
             - redis
@@ -67,6 +68,10 @@ services:
 networks:
     sail:
         driver: bridge
+    takeout:
+        external:
+            name: takeout
+
 volumes:
     sailmysql:
         driver: local
