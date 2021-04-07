@@ -29,7 +29,9 @@ Route::resource('user',UserController::class);
 Route::post('login',[UserController::class,'login']);
 
 
+
 Route::middleware('auth')->group(function () {
+    Route::get('logout',[UserController::class,'logout']);
     Route::get('user',[UserController::class, 'index']);
     Route::resource('expense', ExpenseController::class);
 
@@ -38,7 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('creditor' , CreditorController::class);
 
     Route::resource('debtor' , DebtorController::class);
-    
+
 
 
     Route::get('summary/{id}' , [SummaryController::class,'index'])->name('summary.index');

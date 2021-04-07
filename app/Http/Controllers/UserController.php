@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 
 class UserController extends Controller
 {
@@ -20,7 +22,7 @@ class UserController extends Controller
 
         if(auth()->user()){
             return response()->json([
-                'username' => auth()->user()->username
+                'user' => auth()->user()
             ]);
         }
         else{
@@ -51,13 +53,22 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
-        $user = User::create($request->except('password')
-        +['password'=>Hash::make($request->password)]);
 
+        try {
+            $user = User::create($request->except('password')
+        +['password'=>Hash::make($request->password)]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'failed'
+            ]);
+        }
         return response()->json([
-            'message' => 'user created',
+            'message' => 'successful',
             'user' => $user['username']
         ]);
+
+
+
     }
 
     /**
@@ -110,7 +121,7 @@ class UserController extends Controller
             $credentials = $request->only(['email','password']);
             $token = auth()->attempt($credentials);
             if(!$token){
-                return response()->json(['error' =>'invalid credentials']);
+                return false;
             }
             return true;
         }
@@ -119,19 +130,22 @@ class UserController extends Controller
     }
 
     public function login(Request $request){
-        $authenticate = $this->authenticate($request);
-        if($authenticate){
             $credentials = $request->only(['email','password']);
             $user = User::where('email',$credentials['email'])->first();
-            $token = auth()->login($user);
+            try {
+                $token = auth()->login($user);
+            } catch (\Throwable $t) {
+                return response()->json(['message' =>'Invalid']);
+            }
+
             return response()->json([
                 "token" => $token,
-                "message" => $user->username.' logged in successfully'
+                "message" => 'successful'
                 ]);
-        }
     }
 
     public function logout(){
         auth()->logout();
+        return response()->json(['message'=>'logged out successfully']);
     }
 }
