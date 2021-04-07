@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Expense;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExpenseController extends Controller
 {
@@ -48,11 +49,20 @@ class ExpenseController extends Controller
             'date' => 'required',
             'category'=>'required'
         ]);
-        $expense = Expense::create($request->all()+[
-            'user_id' => auth()->user()->id
-        ]);
-        return response()->json(['message'=> 'expense created',
-        'expense' => $expense]);
+
+        try{
+            $expense = Expense::create($request->all()+[
+                'user_id' => auth()->user()->id
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'message' => 'failed'
+            ]);
+        }
+
+        return response()->json([
+            'message'=> 'expense created',
+            'expense' => $expense]);
         // return Expense::create($request->all());
     }
 
