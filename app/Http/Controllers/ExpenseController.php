@@ -104,11 +104,18 @@ class ExpenseController extends Controller
             'amount' => 'required',
             'date' => 'required',
         ]);
+        try{
         $expense = Expense::find($request->id);
         $expense->update($request->except('id'));
+        }catch(\Exception $e){
+            return response()->json([
+                'message' => ' failed'
+            ]);
+        }
+
 
         return response()->json([
-            'message' => 'expense updated!',
+            'message' => 'successful',
             'expense' => $expense
         ]);
     }
