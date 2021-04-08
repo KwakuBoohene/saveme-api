@@ -34,8 +34,9 @@ Route::post('login',[UserController::class,'login']);
 Route::middleware('auth')->group(function () {
     Route::get('logout',[UserController::class,'logout']);
     Route::get('user',[UserController::class, 'index']);
-    Route::resource('expense', ExpenseController::class);
 
+    Route::resource('expense', ExpenseController::class);
+    Route::get('expenses/7days', [ExpenseController::class,'expenses7days']);
     Route::resource('savings', SavingController::class);
 
     Route::resource('income' , IncomeController::class);

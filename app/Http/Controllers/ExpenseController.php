@@ -47,11 +47,12 @@ class ExpenseController extends Controller
             'description' => 'required',
             'amount' => 'required',
             'date' => 'required',
-            'category'=>'required'
+            'category'=>'required',
+            'expenseFrom'=>'required'
         ]);
 
         try{
-            $expense = Expense::create($request->all()+[
+            $expense = Expense::create($request->except('id')+[
                 'user_id' => auth()->user()->id
             ]);
         }catch(\Exception $e){
@@ -134,7 +135,8 @@ class ExpenseController extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'failed'
+                'message' => 'failed',
+                'error' => $e
             ]);
         }
         return response()->json([
@@ -143,4 +145,24 @@ class ExpenseController extends Controller
 
 
     }
+
+    public function expenses7days(){
+        $startdate = date('Y-m-d', strtotime('-7 days'));
+        $enddate = date('Y-m-d');
+        $id = auth()->user()->id;
+        try {
+            $expense = Expense::where('user_id',$id)->whereBetween('date',[$startdate,$enddate])->select('date','amount')->get();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $th->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'successful',
+            'expenses' => $expense
+        ]);
+    }
+
 }

@@ -59,7 +59,8 @@ class UserController extends Controller
         +['password'=>Hash::make($request->password)]);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'failed'
+                'message' => 'failed',
+                'error' => $e
             ]);
         }
         return response()->json([
@@ -131,11 +132,22 @@ class UserController extends Controller
 
     public function login(Request $request){
             $credentials = $request->only(['email','password']);
-            $user = User::where('email',$credentials['email'])->first();
+
             try {
-                $token = auth()->login($user);
+                $user = User::where('email',$credentials['email'])->first();
+                if(Hash::check($credentials['password'], $user['password'])){
+                    $token = auth()->login($user);
+                }else{
+                    return response()->json([
+                        'message' =>'Invalid',
+                        'error' => 'Invalid Password'
+                        ]);
+                }
             } catch (\Throwable $t) {
-                return response()->json(['message' =>'Invalid']);
+                return response()->json([
+                    'message' =>'Invalid',
+                    'error' => $t->getMessage()
+                    ]);
             }
 
             return response()->json([

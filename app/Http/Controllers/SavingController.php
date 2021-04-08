@@ -53,7 +53,8 @@ class SavingController extends Controller
             ]);
         }catch(\Exception $e){
             return response()->json([
-                'message' => 'failed'
+                'message' => 'failed',
+                'error' => $e
             ]);
         }
 
@@ -105,7 +106,8 @@ class SavingController extends Controller
         $saving->update($request->except('id'));
         }catch(\Exception $e){
             return response()->json([
-                'message' => ' failed'
+                'message' => ' failed',
+                'error' => $e
             ]);
         }
 
@@ -130,7 +132,8 @@ class SavingController extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'failed'
+                'message' => 'failed',
+                'error' => $e
             ]);
         }
         return response()->json([

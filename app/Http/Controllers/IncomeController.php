@@ -16,7 +16,7 @@ class IncomeController extends Controller
     {
         //Shows all instances a user gained income
         $income = auth()->user()->income;
-        return response()->json($income);
+        return response()->json(['income' =>$income]);
     }
 
     /**
@@ -38,15 +38,26 @@ class IncomeController extends Controller
     public function store(Request $request)
     {
         //
-
         $request->validate([
             'source' => 'required',
             'amount' => 'required',
             'date' => 'required',
             'user_id' => 'required',
         ]);
-        $income = Income::create($request->all());
-        return response()->json(['message'=> 'income instance created',
+        try {
+            //code...
+
+            $income = Income::create($request->all());
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'message'=>'failed',
+                'error' => $th
+            ]);
+        }
+
+
+        return response()->json(['message'=> 'successful',
         'income' => $income]);
     }
 
@@ -89,9 +100,19 @@ class IncomeController extends Controller
             'date' => 'required',
             'user_id' => 'required',
         ]);
-        $income = Income::find($id);
+
+        try {
+            $income = Income::find($id);
         $income->update($request->all());
-        return response()->json(['message'=> 'income instance updated',
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'message'=>'failed',
+                'error' => $th
+            ]);
+        }
+
+        return response()->json(['message'=> 'successful',
         'income' => $income]);
     }
 
@@ -104,9 +125,19 @@ class IncomeController extends Controller
     public function destroy(Income $income)
     {
         //
-        $income->delete();
+        try {
+            //code...
+            $income->delete();
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'message'=>'failed',
+                'error'=> $th
+            ]);
+        }
+
         return response()->json([
-            'message'=>'income instance deleted'
+            'message'=>'successful'
         ]);
     }
 }
