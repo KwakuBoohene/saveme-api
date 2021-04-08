@@ -61,7 +61,7 @@ class ExpenseController extends Controller
         }
 
         return response()->json([
-            'message'=> 'expense created',
+            'message'=> 'successful',
             'expense' => $expense]);
         // return Expense::create($request->all());
     }
@@ -96,7 +96,7 @@ class ExpenseController extends Controller
      * @param  \App\Models\Expense  $expense
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //updates a user expense
         $request->validate([
@@ -104,8 +104,8 @@ class ExpenseController extends Controller
             'amount' => 'required',
             'date' => 'required',
         ]);
-        $expense = Expense::find($id);
-        $expense->update($request->all());
+        $expense = Expense::find($request->id);
+        $expense->update($request->except('id'));
 
         return response()->json([
             'message' => 'expense updated!',
@@ -122,10 +122,18 @@ class ExpenseController extends Controller
     public function destroy(Expense $expense)
     {
         //deletes a user expense
+        try {
+            $expense->delete();
 
-        $expense->delete();
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'failed'
+            ]);
+        }
         return response()->json([
-            'message' => 'expense deleted'
+            'message' => 'successful'
         ]);
+
+
     }
 }
