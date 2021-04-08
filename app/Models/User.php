@@ -48,6 +48,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Expense::class);
     }
 
+    public function savings(){
+        return $this->hasMany(Saving::class);
+    }
+
     public function income(){
         return $this->hasMany(Income::class);
     }
