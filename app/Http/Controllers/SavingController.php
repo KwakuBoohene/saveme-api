@@ -48,7 +48,7 @@ class SavingController extends Controller
         ]);
 
         try{
-            $saving = Saving::create($request->all()+[
+            $saving = Saving::create($request->except('id')+[
                 'user_id' => auth()->user()->id
             ]);
         }catch(\Exception $e){
