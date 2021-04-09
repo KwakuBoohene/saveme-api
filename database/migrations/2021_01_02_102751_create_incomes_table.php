@@ -18,7 +18,6 @@ class CreateIncomesTable extends Migration
             $table->mediumText('source');
             $table->date('date');
             $table->double('amount',$scale=2);
-            $table->string('category');
             $table->timestamps();
             $table->foreignId('user_id')->constrained('users');
         });

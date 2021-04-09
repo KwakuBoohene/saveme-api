@@ -42,17 +42,18 @@ class IncomeController extends Controller
             'source' => 'required',
             'amount' => 'required',
             'date' => 'required',
-            'user_id' => 'required',
         ]);
         try {
             //code...
 
-            $income = Income::create($request->all());
+            $income = Income::create($request->except('id')+[
+               'user_id'=>auth()->user()->id
+            ]);
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json([
                 'message'=>'failed',
-                'error' => $th
+                'error' => $th->getMessage()
             ]);
         }
 
@@ -98,17 +99,16 @@ class IncomeController extends Controller
             'source' => 'required',
             'amount' => 'required',
             'date' => 'required',
-            'user_id' => 'required',
         ]);
 
         try {
             $income = Income::find($id);
-        $income->update($request->all());
+        $income->update($request->except('id'));
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json([
                 'message'=>'failed',
-                'error' => $th
+                'error' => $th->getMessage()
             ]);
         }
 
@@ -132,7 +132,7 @@ class IncomeController extends Controller
             //throw $th;
             return response()->json([
                 'message'=>'failed',
-                'error'=> $th
+                'error'=> $th->getMessage()
             ]);
         }
 
@@ -141,3 +141,4 @@ class IncomeController extends Controller
         ]);
     }
 }
+

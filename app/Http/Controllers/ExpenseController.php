@@ -20,7 +20,10 @@ class ExpenseController extends Controller
         //Shows user expenses by user
 
         $expenses = auth()->user()->expenses;
-        return response()->json(['expenses'=> $expenses ]);
+        return response()->json([
+            'message'=>'successful',
+            'expenses'=> $expenses
+            ]);
     }
 
 
@@ -57,7 +60,8 @@ class ExpenseController extends Controller
             ]);
         }catch(\Exception $e){
             return response()->json([
-                'message' => 'failed'
+                'message' => 'failed',
+                'error' => $e
             ]);
         }
 
@@ -152,6 +156,40 @@ class ExpenseController extends Controller
         $id = auth()->user()->id;
         try {
             $expense = Expense::where('user_id',$id)->whereBetween('date',[$startdate,$enddate])->select('date','amount')->get();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $th->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'successful',
+            'expenses' => $expense
+        ]);
+    }
+
+    public function expensesFromSavings(){
+        $id = auth()->user()->id;
+        try {
+            $expense = Expense::where('user_id',$id)->where('expenseFrom',true)->sum('amount');
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $th->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'successful',
+            'expenses' => $expense
+        ]);
+    }
+
+    public function expensesFromIncome(){
+        $id = auth()->user()->id;
+        try {
+            $expense = Expense::where('user_id',$id)->where('expenseFrom',false)->sum('amount');
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'failed',

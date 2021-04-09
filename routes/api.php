@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('expense', ExpenseController::class);
     Route::get('expenses/7days', [ExpenseController::class,'expenses7days']);
+    Route::get('expenses/income', [ExpenseController::class,'expensesFromIncome']);
+    Route::get('expenses/savings', [ExpenseController::class,'expensesFromSavings']);
     Route::resource('savings', SavingController::class);
 
     Route::resource('income' , IncomeController::class);
