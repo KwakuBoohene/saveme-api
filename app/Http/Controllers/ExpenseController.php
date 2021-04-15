@@ -155,7 +155,7 @@ class ExpenseController extends Controller
         $enddate = date('Y-m-d');
         $id = auth()->user()->id;
         try {
-            $expense = Expense::where('user_id',$id)->whereBetween('date',[$startdate,$enddate])->select('date','amount')->get();
+            $expense = Expense::where('user_id',$id)->whereBetween('date',[$startdate,$enddate])->select('date','amount')->orderBy('date')->get();
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'failed',
