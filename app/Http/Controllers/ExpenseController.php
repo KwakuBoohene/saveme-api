@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
+use App\Models\Saving;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -58,6 +59,18 @@ class ExpenseController extends Controller
             $expense = Expense::create($request->except('id')+[
                 'user_id' => auth()->user()->id
             ]);
+            if ((strtolower($request->category) == 'saving')
+             or (strtolower ($request->category)=='investment')
+             or (strtolower ($request->category)=='investments')
+             or (strtolower ($request->category)=='savings') ) {
+               $saving = Saving::create([
+                   'description' => $request->description,
+                   'amount' => $request->amount,
+                   'date' => $request->date,
+                   'user_id' => auth()->user()->id,
+                   'category' => $request->category
+               ]);
+            }
         }catch(\Exception $e){
             return response()->json([
                 'message' => 'failed',
