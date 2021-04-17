@@ -164,7 +164,7 @@ class ExpenseController extends Controller
     }
 
     public function expenses7days(){
-        $startdate = date('Y-m-d', strtotime('-7 days'));
+        $startdate = date('Y-m-d', strtotime('-6 days'));
         $enddate = date('Y-m-d');
         $id = auth()->user()->id;
         try {
