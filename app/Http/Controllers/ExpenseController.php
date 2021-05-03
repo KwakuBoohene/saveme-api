@@ -6,6 +6,7 @@ use App\Models\Expense;
 use App\Models\Saving;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Carbon\Carbon;
 
 class ExpenseController extends Controller
 {
@@ -169,6 +170,44 @@ class ExpenseController extends Controller
         $id = auth()->user()->id;
         try {
             $expense = Expense::where('user_id',$id)->whereBetween('date',[$startdate,$enddate])->select('date','amount')->orderBy('date')->get();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $th->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'successful',
+            'expenses' => $expense
+        ]);
+    }
+
+
+    public function expensesMonth(){
+        $id = auth()->user()->id;
+        try {
+            $expense = Expense::where('user_id',$id)->whereMonth('date',Carbon::now()->month)->select('date','amount')->orderBy('date')->get();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $th->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'successful',
+            'expenses' => $expense
+        ]);
+    }
+
+    public function expensesWeek(){
+        Carbon::setWeekStartsAt(Carbon::SUNDAY);
+        Carbon::setWeekEndsAt(Carbon::SATURDAY);
+        $id = auth()->user()->id;
+        try {
+            $expense = Expense::where('user_id',$id)->whereBetween('date',[Carbon::now()->startOfWeek(),
+            Carbon::now()->endOfWeek()])->select('date','amount')->orderBy('date')->get();
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'failed',

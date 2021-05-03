@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Income;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class IncomeController extends Controller
 {
@@ -115,6 +116,66 @@ class IncomeController extends Controller
         return response()->json(['message'=> 'successful',
         'income' => $income]);
     }
+
+    public function income7days(){
+        $startdate = date('Y-m-d', strtotime('-6 days'));
+        $enddate = date('Y-m-d');
+        $id = auth()->user()->id;
+        try {
+            $income = Income::where('user_id',$id)->whereBetween('date',[$startdate,$enddate])->select('date','amount')->orderBy('date')->get();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $th->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'successful',
+            'income' => $income
+        ]);
+    }
+
+
+    public function incomeMonth(){
+        $startdate = date('Y-m-d', strtotime('-6 days'));
+        $enddate = date('Y-m-d');
+        $id = auth()->user()->id;
+        try {
+            $income = Income::where('user_id',$id)->whereMonth('date',Carbon::now()->month)->select('date','amount')->orderBy('date')->get();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $th->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'successful',
+            'income' => $income
+        ]);
+    }
+
+    public function incomeWeek(){
+        Carbon::setWeekStartsAt(Carbon::SUNDAY);
+        Carbon::setWeekEndsAt(Carbon::SATURDAY);
+        $id = auth()->user()->id;
+        try {
+            $income = Income::where('user_id',$id)->whereBetween('date',[Carbon::now()->startOfWeek(),
+            Carbon::now()->endOfWeek()])->select('date','amount')->orderBy('date')->get();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $th->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'successful',
+            'income' => $income
+        ]);
+    }
+
 
     /**
      * Remove the specified resource from storage.

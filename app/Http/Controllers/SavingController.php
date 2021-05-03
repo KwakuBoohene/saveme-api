@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Saving;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Carbon\Carbon;
 
 class SavingController extends Controller
 {
@@ -115,6 +116,65 @@ class SavingController extends Controller
         return response()->json([
             'message' => 'successful',
             'saving' => $saving
+        ]);
+    }
+
+    public function savings7days(){
+        $startdate = date('Y-m-d', strtotime('-6 days'));
+        $enddate = date('Y-m-d');
+        $id = auth()->user()->id;
+        try {
+            $savings = Saving::where('user_id',$id)->whereBetween('date',[$startdate,$enddate])->select('date','amount')->orderBy('date')->get();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $th->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'successful',
+            'savings' => $savings
+        ]);
+    }
+
+
+    public function savingsMonth(){
+        $startdate = date('Y-m-d', strtotime('-6 days'));
+        $enddate = date('Y-m-d');
+        $id = auth()->user()->id;
+        try {
+            $savings = Saving::where('user_id',$id)->whereMonth('date',Carbon::now()->month)->select('date','amount')->orderBy('date')->get();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $th->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'successful',
+            'savings' => $savings
+        ]);
+    }
+
+    public function savingsWeek(){
+        Carbon::setWeekStartsAt(Carbon::SUNDAY);
+        Carbon::setWeekEndsAt(Carbon::SATURDAY);
+        $id = auth()->user()->id;
+        try {
+            $savings = Saving::where('user_id',$id)->whereBetween('date',[Carbon::now()->startOfWeek(),
+            Carbon::now()->endOfWeek()])->select('date','amount')->orderBy('date')->get();
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $th->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'successful',
+            'savings' => $savings
         ]);
     }
 
