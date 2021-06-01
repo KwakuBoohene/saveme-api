@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Saving extends Model
+class Entry extends Model
 {
     use HasFactory;
-    protected $table = "savings";
+    protected $table = "entries";
     protected $fillable = [
         'description',
+        'source',
         'amount',
         'date',
-        'user_id',
-        'category',
-        'id'
+        'account_id',
+        'category'
     ];
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function account(){
+        return $this->belongsTo(Account::class);
     }
 }

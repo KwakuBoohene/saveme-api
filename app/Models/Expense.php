@@ -13,13 +13,11 @@ class Expense extends Model
         'description',
         'amount',
         'date',
-        'user_id',
-        'category',
-        'id',
-        'expenseFrom'
+        'account_id',
+        'category'
     ];
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function account(){
+        return $this->belongsTo(Account::class);
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSummariesTable extends Migration
+class CreateAccountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateSummariesTable extends Migration
      */
     public function up()
     {
-        Schema::create('summaries', function (Blueprint $table) {
+        Schema::create('accounts', function (Blueprint $table) {
             $table->id();
+            $table->string('nickname')->nullable();
+            $table->double('amount',$scale=2);
             $table->foreignId('user_id')->constrained('users');
-            $table->double('net_income',$scale=2);
-            $table->double('net_debt',$scale=2);
+            $table->foreignId('account_type')->constrained('account_types');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateSummariesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('summaries');
+        Schema::dropIfExists('accounts');
     }
 }

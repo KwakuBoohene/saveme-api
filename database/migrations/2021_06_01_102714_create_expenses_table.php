@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIncomesTable extends Migration
+class CreateExpensesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateIncomesTable extends Migration
      */
     public function up()
     {
-        Schema::create('incomes', function (Blueprint $table) {
+        Schema::create('expenses', function (Blueprint $table) {
             $table->id();
-            $table->mediumText('source');
+            $table->mediumText('description');
             $table->date('date');
             $table->double('amount',$scale=2);
+            $table->string('category');
             $table->timestamps();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('account_id')->constrained('accounts');
         });
     }
 
@@ -30,6 +31,6 @@ class CreateIncomesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('incomes');
+        Schema::dropIfExists('expenses');
     }
 }

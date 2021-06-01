@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateExpensesTable extends Migration
+class CreateEntriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateExpensesTable extends Migration
      */
     public function up()
     {
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('entries', function (Blueprint $table) {
             $table->id();
             $table->mediumText('description');
+            $table->mediumText('source')->nullable();
             $table->date('date');
             $table->double('amount',$scale=2);
             $table->string('category');
-            $table->boolean('expenseFrom');
             $table->timestamps();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('account_id')->constrained('accounts');
         });
     }
 
@@ -32,6 +32,6 @@ class CreateExpensesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expenses');
+        Schema::dropIfExists('entries');
     }
 }

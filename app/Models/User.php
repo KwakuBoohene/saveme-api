@@ -44,28 +44,22 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    public function expenses(){
-        return $this->hasMany(Expense::class);
-    }
 
-    public function savings(){
-        return $this->hasMany(Saving::class);
-    }
 
-    public function income(){
-        return $this->hasMany(Income::class);
-    }
-
-    public function summary(){
-        return $this->hasMany(Summary::class);
-    }
-
-    public function debtor(){
+    public function debtors(){
         return $this->hasMany(Debtor::class);
     }
 
-    public function creditor(){
+    public function creditors(){
         return $this->hasMany(Creditor::class);
+    }
+
+    public function accounts(){
+        return $this->hasMany(Account::class);
+    }
+
+    public function accountTypes(){
+        return $this->hasMany(AccountType::class,'createdby');
     }
 
         /**
